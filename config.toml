@@ -1,5 +1,6 @@
 baseURL = "https://rainleave.github.io/"
-theme = "ananke"
+# theme = "LoveIt"
+
 title = "My Hugo Blog"
 
 [permalinks]
