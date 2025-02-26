@@ -1,31 +1,35 @@
-name: Hugo CI/CD
-
+name: Hugo Deploy
 on:
   push:
     branches:
       - main
 
 jobs:
-  build-and-deploy:
+  hugo:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      # 1. 完整拉取代码（含主题目录）
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          submodules: true
-          fetch-depth: 0
+          fetch-depth: 0  # 确保获取完整历史（可选）
 
+      # 2. 安装Hugo并指定版本
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: 'latest'
-          extended: true
 
-      - name: Build
-        run: hugo --minify
+      # 3. 构建时明确引用主题（关键步骤）
+      - name: Build Hugo site
+        run: hugo -t <your-theme-name>  # 替换为实际主题名称
+        env:
+          HUGO_ENVIRONMENT: production
 
-      - name: Deploy
+      # 4. 部署到gh-pages分支
+      - name: Deploy to GH Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          full_circle_deployment: true  # 确保覆盖旧文件
