@@ -9,14 +9,24 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: true  # 如果你的主题使用了子模块，需要添加这一行
+          fetch-depth: 0   # 获取完整的仓库历史
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: 'latest'
-      - name: Build Hugo site
-        run: hugo
+
+      - name: Build Hugo site in production environment
+        run: hugo --gc --minify --environment production
+        env:
+          HUGO_ENVIRONMENT: production
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir:./public
+          publish_dir: ./public
+
+

@@ -5,3 +5,9 @@ title = "My Hugo Blog"
 
 [permalinks]
   posts = "/posts/:year/:month/:day/:title/"
+
+# 允许渲染原始HTML
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
